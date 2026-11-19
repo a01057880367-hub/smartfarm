@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartFarm Manager | 스마트팜 저비용 운영비 절감 시스템</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+
+  <!-- 글로벌 네비게이션 바 -->
+  <header class="navbar" id="mainNavbar" style="display: none;">
+    <div class="nav-brand">
+      <span class="brand-icon">🌿</span>
+      <div>
+        <div class="brand-title">SmartFarm Manager</div>
+        <div class="brand-sub">스마트팜 저비용 운영비 절감 시스템</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn active" data-view="home">🏠 홈</button>
+      <button class="nav-btn" data-view="env">📊 구역별 환경 입력</button>
+      <button class="nav-btn" data-view="plan">💡 저비용 운영 계획</button>
+      <button class="nav-btn" data-view="history">📋 사용량·비용 이력</button>
+      <button class="nav-btn" data-view="settings">⚙ 설정</button>
+    </nav>
+
+    <div class="nav-actions">
+      <span class="user-badge" id="navUserBadge">👤 농가님</span>
+      <button class="btn btn-secondary btn-sm" id="btnLogout">로그아웃</button>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 영역 -->
+  <main class="main-content">
+
+    <!-- ========================================== -->
+    <!-- [A] 인증 화면 (시작, 로그인, 회원가입) -->
+    <!-- ========================================== -->
+    <section id="view-auth" class="view-section active">
+      <div class="auth-wrapper">
+        <div class="auth-card">
+          <div class="auth-logo">🌿</div>
+          <h1 class="auth-title">SmartFarm Manager</h1>
+          <p class="auth-desc">온실 센서 환경 분석 및 저비용 운영비 절감 시스템</p>
+
+          <!-- 1. 시작 화면 (요구사항 1) -->
+          <div id="authWelcomeBox">
+            <div class="auth-prompt-box">
+              <div class="auth-prompt-title">“회원가입을 하시겠습니까, 로그인하시겠습니까?”</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                기존 계정이 있으시면 로그인을, 처음 이용하시는 농가는 회원가입을 선택해 주세요.
+              </p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <button class="btn btn-primary btn-block" id="btnGoLogin">로그인</button>
+              <button class="btn btn-secondary btn-block" id="btnGoRegister">회원가입</button>
+              <button class="btn btn-accent btn-block" id="btnQuickDemo">⚡ 체험용 데모 계정으로 바로 시작 (farmer / 123)</button>
+            </div>
+          </div>
+
+          <!-- 2. 로그인 화면 (요구사항 5, 6) -->
+          <div id="authLoginBox" style="display: none; text-align: left;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem;">로그인</h2>
+            <form id="formLogin">
+              <div class="form-group">
+                <label class="form-label" for="loginId">아이디</label>
+                <input class="form-control" type="text" id="loginId" placeholder="아이디를 입력하세요" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="loginPw">비밀번호</label>
+                <input class="form-control" type="password" id="loginPw" placeholder="비밀번호를 입력하세요" required>
+              </div>
+              <div id="loginError" style="font-size: 0.825rem; color: var(--danger); margin-bottom: 0.75rem; display: none;"></div>
+              <button class="btn btn-primary btn-block" type="submit" style="margin-bottom: 0.75rem;">로그인하기</button>
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                <a href="#" id="linkLoginToWelcome" style="color: var(--text-muted); text-decoration: none;">← 첫 화면으로</a>
+                <a href="#" id="linkLoginToReg" style="color: var(--primary-light); text-decoration: none; font-weight: 600;">회원가입 이동 →</a>
+              </div>
+            </form>
+          </div>
+
+          <!-- 3. 회원가입 화면 (요구사항 2, 3, 4) -->
+          <div id="authRegisterBox" style="display: none; text-align: left;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem;">새 계정 회원가입</h2>
+            <form id="formRegister">
+              <div class="form-group">
+                <label class="form-label" for="regId">아이디</label>
+                <input class="form-control" type="text" id="regId" placeholder="아이디를 입력하세요" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="regPw">비밀번호</label>
+                <input class="form-control" type="password" id="regPw" placeholder="비밀번호를 입력하세요" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="regPwc">비밀번호 확인</label>
+                <input class="form-control" type="password" id="regPwc" placeholder="비밀번호를 다시 입력하세요" required>
+              </div>
+              <div id="regError" style="font-size: 0.825rem; color: var(--danger); margin-bottom: 0.75rem; display: none;"></div>
+              <button class="btn btn-primary btn-block" type="submit" style="margin-bottom: 0.75rem;">가입 완료 및 계정 생성</button>
+              <div style="text-align: left; font-size: 0.85rem;">
+                <a href="#" id="linkRegToWelcome" style="color: var(--text-muted); text-decoration: none;">← 첫 화면으로 돌아가기</a>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- [A-8] Home 대시보드 화면 -->
+    <!-- ========================================== -->
+    <section id="view-home" class="view-section">
+      <!-- 배너 카드 -->
+      <div class="card" style="background: linear-gradient(135deg, #1E5128 0%, #163E1F 100%); color: #FFFFFF;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.35rem;" id="homeWelcomeTitle">🌿 스마트팜 관제 대시보드</h2>
+        <p style="font-size: 0.9rem; color: #D1FAE5;">구역별 센서 환경을 실시간 모니터링하고 최저비용 에너지·용수 절감 계획을 수립하세요.</p>
+      </div>
+
+      <!-- 빠른 바로가기 카드 3종 -->
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        <div class="card" style="margin-bottom: 0;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</div>
+          <h3 class="card-title">구역별 환경 입력</h3>
+          <p class="card-subtitle" style="margin: 0.25rem 0 1rem 0;">온도, 습도, 토양수분, 조도 입력 및 변화량 추적</p>
+          <button class="btn btn-primary btn-sm" onclick="App.navigateTo('env')">메뉴 이동 →</button>
+        </div>
+        <div class="card" style="margin-bottom: 0;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💡</div>
+          <h3 class="card-title">저비용 운영 계획</h3>
+          <p class="card-subtitle" style="margin: 0.25rem 0 1rem 0;">관개 필요량 계산 및 최저비용 장비 가동 시뮬레이션</p>
+          <button class="btn btn-accent btn-sm" onclick="App.navigateTo('plan')">메뉴 이동 →</button>
+        </div>
+        <div class="card" style="margin-bottom: 0;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📋</div>
+          <h3 class="card-title">사용량·비용 이력</h3>
+          <p class="card-subtitle" style="margin: 0.25rem 0 1rem 0;">실제 급수 및 전력 사용량 통계, 계획 vs 실적 비교</p>
+          <button class="btn btn-secondary btn-sm" onclick="App.navigateTo('history')">메뉴 이동 →</button>
+        </div>
+      </div>
+
+      <!-- 재배 구역 목록 헤더 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700;">🌱 등록된 재배 구역 현황</h3>
+        <button class="btn btn-secondary btn-sm" onclick="App.navigateTo('settings')">+ 새 구역 관리</button>
+      </div>
+
+      <!-- 구역 카드 리스트 컨테이너 -->
+      <div id="homeZonesContainer" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- JS로 동적 렌더링 -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- [B] 메뉴 1: 구역별 환경 입력 화면 (9~14) -->
+    <!-- ========================================== -->
+    <section id="view-env" class="view-section">
+      <div class="grid-2">
+        <!-- 좌측: 입력 폼 -->
+        <div class="card">
+          <h2 class="card-title" style="color: var(--primary);">📊 구역별 환경 센서 측정값 입력</h2>
+          <p class="card-subtitle" style="margin-bottom: 1.25rem;">구역을 선택하고 현재 측정된 온실 환경 데이터를 입력해 주세요.</p>
+
+          <form id="formEnvInput">
+            <!-- 9. 대상 구역 선택 -->
+            <div class="form-group">
+              <label class="form-label" for="envZoneSelect">대상 재배 구역 선택</label>
+              <select class="form-control" id="envZoneSelect"></select>
+            </div>
+
+            <!-- 구역 상세 제원 정보 박스 -->
+            <div class="stat-box" style="margin-bottom: 1rem;" id="envZoneInfoBox">
+              <div style="font-size: 0.85rem; color: var(--text-muted);" id="envZoneInfoText">구역을 선택하면 제원이 표시됩니다.</div>
+            </div>
+
+            <!-- 10. 최근 실제 급수일 -->
+            <div class="form-group">
+              <label class="form-label" for="envLastWaterDate">최근 실제 급수일 (YYYY-MM-DD)</label>
+              <input class="form-control" type="date" id="envLastWaterDate">
+            </div>
+
+            <!-- 11. 측정 일시 및 환경값들 -->
+            <div class="form-group">
+              <label class="form-label" for="envRecordedAt">측정 날짜 및 시각</label>
+              <input class="form-control" type="text" id="envRecordedAt" placeholder="YYYY-MM-DD HH:MM">
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="envMoisture">토양 수분 (%) [0~100]</label>
+                <input class="form-control" type="number" step="0.1" id="envMoisture" placeholder="예: 22.5" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="envTemp">현재 기온 (℃)</label>
+                <input class="form-control" type="number" step="0.1" id="envTemp" placeholder="예: 25.0" required>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="envHumidity">공기 상대습도 (%RH) [0~100]</label>
+                <input class="form-control" type="number" step="0.1" id="envHumidity" placeholder="예: 65.0" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="envLux">현재 조도 (lx) [>=0]</label>
+                <input class="form-control" type="number" id="envLux" placeholder="예: 25000" required>
+              </div>
+            </div>
+
+            <div id="envFeedbackMsg" style="font-size: 0.85rem; margin-bottom: 0.75rem; display: none;"></div>
+
+            <button class="btn btn-primary btn-block" type="submit">측정값 등록 및 저장</button>
+          </form>
+        </div>
+
+        <!-- 우측: 변화 추이 및 운영 계획 연동 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h2 class="card-title" style="color: var(--primary);">📈 환경 변화 추이 및 권장 안내</h2>
+            <p class="card-subtitle" style="margin-bottom: 1.25rem;">동일 구역의 직전 측정 기록과 비교하여 환경 변화를 실시간 분석합니다.</p>
+
+            <div id="envChangeContainer">
+              <div class="stat-box" style="text-align: center; padding: 2rem;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                  측정값을 등록하면 직전 측정 기록과의<br>환경 변화량(수분, 기온, 습도, 조도)이 이곳에 표시됩니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 하단 운영 계획 바로가기 배너 (요구사항 14) -->
+          <div style="background: var(--primary-subtle); border: 1px solid var(--primary-border); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1.5rem;">
+            <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">💡 방금 등록한 측정값으로 최적 운영비를 계산할까요?</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">작물 생육 기준과 전기·물 단가를 바탕으로 최저 비용 조치 계획을 확인합니다.</p>
+            <button class="btn btn-primary btn-block" onclick="App.navigateTo('plan')">운영 계획 보기 바로가기 →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- [C] 메뉴 2: 저비용 운영 계획 화면 (15~28) -->
+    <!-- ========================================== -->
+    <section id="view-plan" class="view-section">
+      <!-- 15. 상단 컨트롤 바 -->
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <label class="form-label" style="margin: 0;" for="planZoneSelect">분석 대상 구역:</label>
+          <select class="form-control" style="width: auto; min-width: 200px;" id="planZoneSelect"></select>
+
+          <label class="form-label" style="margin: 0; margin-left: 0.5rem;" for="planLightHours">누적 일조(h, 선택):</label>
+          <input class="form-control" style="width: 80px;" type="number" step="0.5" id="planLightHours" placeholder="예: 6">
+        </div>
+        <button class="btn btn-primary" id="btnCalculatePlan">⚡ 저비용 운영 계획 계산</button>
+      </div>
+
+      <!-- 18. 구역별 관개 판단 및 권장량 요약 표 -->
+      <div class="card">
+        <h3 class="card-title" style="color: var(--primary); margin-bottom: 0.75rem;">💧 구역별 관개(급수) 판단 및 권장량 요약</h3>
+        <div class="table-responsive">
+          <table class="table" id="tableWaterSummary">
+            <thead>
+              <tr>
+                <th>구역명</th>
+                <th>작물</th>
+                <th>현재 토양수분</th>
+                <th>판단 결과</th>
+                <th>최근 급수일</th>
+                <th>권장 급수량</th>
+                <th>예상 물 비용</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div style="text-align: right; font-weight: 700; color: var(--primary); margin-top: 0.75rem;" id="lblTotalWaterSummary">
+          전체 권장 급수량 합계: 0 L (예상 물 비용: 0 원)
+        </div>
+      </div>
+
+      <!-- 26, 27. 최적 추천 운영 계획 카드 -->
+      <div class="card" id="optimalPlanCard" style="border: 2px solid var(--primary-light);">
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          상단에서 구역을 선택한 후 [저비용 운영 계획 계산] 버튼을 누르면 최적 추천 계획이 표시됩니다.
+        </div>
+      </div>
+
+      <!-- 28. 장비 가동 후보군 상세 비교 -->
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom: 0.75rem;">📊 장비 가동 후보군 상세 비교 (비용 및 생육 기준 충족 여부)</h3>
+        <div class="table-responsive">
+          <table class="table" id="tableCandidates">
+            <thead>
+              <tr>
+                <th>후보 계획명</th>
+                <th>환기팬 가동</th>
+                <th>보광등 가동</th>
+                <th>예상 기온</th>
+                <th>예상 습도</th>
+                <th>예상 전력량</th>
+                <th>전기 비용</th>
+                <th>총 예상비용</th>
+                <th>기준 충족 여부</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="9" style="text-align: center; color: var(--text-muted);">계획 계산을 실행해 주세요.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- [D] 메뉴 3: 사용량·비용 이력 및 통계 (29~35) -->
+    <!-- ========================================== -->
+    <section id="view-history" class="view-section">
+      <div class="grid-2">
+        <!-- 좌측: 실적 등록 폼 -->
+        <div class="card">
+          <h2 class="card-title" style="color: var(--primary);">✍ 오늘 작업 실적 등록</h2>
+          <p class="card-subtitle" style="margin-bottom: 1.25rem;">실제 투입한 급수량 및 장비 가동 시간을 기록합니다.</p>
+
+          <form id="formHistory">
+            <!-- 29. 계획 불러오기 -->
+            <div class="form-group" style="background: var(--surface-alt); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+              <label class="form-label" for="histPlanSelect">저장된 운영 계획 불러오기 (선택)</label>
+              <select class="form-control" id="histPlanSelect"></select>
+              <div id="histPlanHint" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+                계획을 선택하면 권장 급수량 및 가동시간이 자동 연동됩니다.
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="histZoneSelect">대상 재배 구역</label>
+                <select class="form-control" id="histZoneSelect"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="histDate">작업 일자 (YYYY-MM-DD)</label>
+                <input class="form-control" type="date" id="histDate" required>
+              </div>
+            </div>
+
+            <!-- 30. 실제 급수량 및 가동시간 -->
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="histWater">실제 급수량 (L)</label>
+                <input class="form-control" type="number" step="0.1" id="histWater" value="0" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="histLightH">보광등 켠 시간 (시간)</label>
+                <input class="form-control" type="number" step="0.1" id="histLightH" value="0" required>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="histFanMin">환기팬 가동 (분)</label>
+                <input class="form-control" type="number" id="histFanMin" value="0" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="histHeaterMin">난방기 가동 (분)</label>
+                <input class="form-control" type="number" id="histHeaterMin" value="0" required>
+              </div>
+            </div>
+
+            <!-- 31. 실측 전력량 -->
+            <div class="form-group">
+              <label class="form-label" for="histMeasuredKwh">직접 측정 전력량 (kWh, 비워둘 시 장비 사양으로 자동 추정)</label>
+              <input class="form-control" type="number" step="0.01" id="histMeasuredKwh" placeholder="직접 측정한 경우에만 입력">
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit">💾 실적 저장 및 최근 급수일 반영</button>
+          </form>
+        </div>
+
+        <!-- 우측: 통계 및 계획 vs 실적 비교 -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h2 class="card-title" style="color: var(--primary);">📋 운영 이력 & 통계</h2>
+
+            <!-- 33. 기간 필터 -->
+            <div style="display: flex; gap: 0.25rem;">
+              <button class="btn btn-sm btn-secondary active" data-period="all">전체</button>
+              <button class="btn btn-sm btn-secondary" data-period="month">최근 30일</button>
+              <button class="btn btn-sm btn-secondary" data-period="week">최근 7일</button>
+              <button class="btn btn-sm btn-secondary" data-period="today">오늘</button>
+            </div>
+          </div>
+
+          <!-- 34. 통계 지표 카드들 -->
+          <div class="grid-4" style="margin-bottom: 1.25rem;">
+            <div class="stat-box">
+              <div class="stat-label">총 급수량</div>
+              <div class="stat-value" id="statTotalWater">0 L</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">총 보광시간</div>
+              <div class="stat-value" id="statTotalLight">0 h</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">총 전력량</div>
+              <div class="stat-value" id="statTotalKwh">0 kWh</div>
+            </div>
+            <div class="stat-box highlight">
+              <div class="stat-label">총 실적 비용</div>
+              <div class="stat-value" id="statTotalCost">0 원</div>
+            </div>
+          </div>
+
+          <!-- 35. 계획 vs 실적 비교 테이블 -->
+          <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem;">🔍 계획 대비 실제 작업량 및 비용 차이 비교</h4>
+          <div class="table-responsive">
+            <table class="table" id="tableHistories">
+              <thead>
+                <tr>
+                  <th>일자</th>
+                  <th>구역</th>
+                  <th>작물</th>
+                  <th>급수량 (계획/실제)</th>
+                  <th>보광시간</th>
+                  <th>전력량</th>
+                  <th>비용 (계획/실제)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- [E] 설정 화면 (36) -->
+    <!-- ========================================== -->
+    <section id="view-settings" class="view-section">
+      <div class="card">
+        <h2 class="card-title" style="color: var(--primary);">⚙ 시스템 및 재배 환경 설정</h2>
+        <p class="card-subtitle" style="margin-bottom: 1.5rem;">재배 구역 제원, 물·전기 유틸리티 단가, 작물별 적정 생육 기준을 관리합니다.</p>
+
+        <!-- 설정 서브 탭 -->
+        <div style="display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+          <button class="btn btn-sm btn-primary" id="tabBtnZones">🌱 재배 구역 관리</button>
+          <button class="btn btn-sm btn-secondary" id="tabBtnUnits">⚡ 단가 및 장비 소비전력</button>
+          <button class="btn btn-sm btn-secondary" id="tabBtnCrops">🌾 작물별 생육 기준</button>
+        </div>
+
+        <!-- 탭 1: 구역 관리 -->
+        <div id="tabContentZones">
+          <div class="grid-2">
+            <div>
+              <h4 style="font-weight: 700; margin-bottom: 0.5rem;">등록된 재배 구역 목록</h4>
+              <div class="table-responsive">
+                <table class="table" id="tableSettingsZones">
+                  <thead>
+                    <tr>
+                      <th>구역 이름</th>
+                      <th>작물 종류</th>
+                      <th>면적 (m²)</th>
+                      <th>토양 종류</th>
+                      <th>작업</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="stat-box">
+              <h4 style="font-weight: 700; margin-bottom: 0.75rem;" id="zoneFormTitle">새 구역 추가</h4>
+              <form id="formSettingZone">
+                <input type="hidden" id="settingZoneId">
+                <div class="form-group">
+                  <label class="form-label" for="settingZoneName">구역 이름</label>
+                  <input class="form-control" type="text" id="settingZoneName" placeholder="예: C구역 (딸기 온실)" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="settingZoneCrop">작물 종류</label>
+                  <select class="form-control" id="settingZoneCrop">
+                    <option value="토마토">토마토</option>
+                    <option value="상추">상추</option>
+                    <option value="딸기">딸기</option>
+                    <option value="파프리카">파프리카</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="settingZoneArea">재배면적 (m²)</label>
+                  <input class="form-control" type="number" step="0.1" id="settingZoneArea" placeholder="예: 80.0" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="settingZoneSoil">토양 종류</label>
+                  <input class="form-control" type="text" id="settingZoneSoil" placeholder="예: 사양토, 코코피트" required>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button class="btn btn-primary btn-block" type="submit" id="btnSaveZone">저장하기</button>
+                  <button class="btn btn-secondary" type="button" id="btnResetZoneForm" style="display: none;">취소</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 탭 2: 단가 및 장비 -->
+        <div id="tabContentUnits" style="display: none;">
+          <form id="formSettingUnits" style="max-width: 600px;">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="setWaterPrice">💧 물 공급 단가 (원 / m³)</label>
+                <input class="form-control" type="number" id="setWaterPrice" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="setElecPrice">⚡ 전기 요금 단가 (원 / kWh)</label>
+                <input class="form-control" type="number" id="setElecPrice" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="setFanPower">🌀 환기팬 소비전력 (W)</label>
+              <input class="form-control" type="number" id="setFanPower" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="setLightPower">💡 LED 보광등 소비전력 (W)</label>
+              <input class="form-control" type="number" id="setLightPower" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="setHeaterPower">🔥 온풍난방기 소비전력 (W)</label>
+              <input class="form-control" type="number" id="setHeaterPower" required>
+            </div>
+            <button class="btn btn-primary" type="submit">💾 단가 및 장비 설정 저장</button>
+          </form>
+        </div>
+
+        <!-- 탭 3: 작물 기준 -->
+        <div id="tabContentCrops" style="display: none;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            작물별 최적 환경 기준치 (급수 시작 수분, 관개요구량, 적정 온습도, 목표 조도 및 일조시간)
+          </p>
+          <div class="table-responsive">
+            <table class="table" id="tableCropStandards">
+              <thead>
+                <tr>
+                  <th>작물명</th>
+                  <th>급수기준 수분(%)</th>
+                  <th>1회관개량(mm)</th>
+                  <th>적정 기온(℃)</th>
+                  <th>적정 습도(%RH)</th>
+                  <th>기준 조도(lx)</th>
+                  <th>목표 일조시간(h)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 모달: 최초 재배 구역 등록 (요구사항 7) -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalInitialZone">
+    <div class="modal-content">
+      <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">🌱 스마트팜 첫 재배 구역 등록</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        처음 이용하시는 농가입니다. 관리하실 첫 번째 재배 구역 정보를 등록해 주세요.
+      </p>
+      <form id="formInitialZone">
+        <div class="form-group">
+          <label class="form-label" for="initZoneName">구역 이름 (예: A구역, 제1온실)</label>
+          <input class="form-control" type="text" id="initZoneName" value="A구역 (스마트 온실 1)" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="initZoneCrop">작물 종류</label>
+          <select class="form-control" id="initZoneCrop">
+            <option value="토마토">토마토</option>
+            <option value="상추">상추</option>
+            <option value="딸기">딸기</option>
+            <option value="파프리카">파프리카</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="initZoneArea">재배면적 (m²)</label>
+          <input class="form-control" type="number" step="0.1" id="initZoneArea" value="100.0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="initZoneSoil">토양 종류</label>
+          <input class="form-control" type="text" id="initZoneSoil" value="사양토" required>
+        </div>
+        <div id="initZoneError" style="font-size: 0.85rem; color: var(--danger); margin-bottom: 0.75rem; display: none;"></div>
+        <button class="btn btn-primary btn-block" type="submit">구역 등록 완료 및 시작하기</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 스크립트 로드 순서: store.js -> services.js -> app.js -->
+  <script src="js/store.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

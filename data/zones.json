@@ -16,5 +16,14 @@
     "area": 60.0,
     "soil_type": "양토",
     "last_watering_date": "2026-11-17"
+  },
+  {
+    "zone_id": "zone_d896fc",
+    "user_id": "26102403",
+    "name": "A구역 (스마트 온실 1)",
+    "crop_type": "토마토",
+    "area": 100.0,
+    "soil_type": "사양토",
+    "last_watering_date": null
   }
 ]
