@@ -1,0 +1,22 @@
+[
+  {
+    "history_id": "hist_d40515fe",
+    "user_id": "farmer",
+    "zone_id": "zone_01",
+    "zone_name": "A구역 (스마트 온실 1)",
+    "crop_type": "토마토",
+    "date": "2026-11-20",
+    "actual_water_liter": 1000.0,
+    "light_duration_hours": 2.0,
+    "fan_duration_minutes": 10.0,
+    "heater_duration_minutes": 0.0,
+    "total_kwh": 0.253,
+    "is_estimated_kwh": true,
+    "water_cost": 450.0,
+    "electricity_cost": 35.0,
+    "total_cost": 485.0,
+    "plan_id": "plan_16f4bf35",
+    "recommended_water_liter": 1000.0,
+    "planned_total_cost": 450.0
+  }
+]

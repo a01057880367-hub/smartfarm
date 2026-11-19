@@ -1,0 +1,20 @@
+[
+  {
+    "zone_id": "zone_01",
+    "user_id": "farmer",
+    "name": "A구역 (스마트 온실 1)",
+    "crop_type": "토마토",
+    "area": 100.0,
+    "soil_type": "사양토",
+    "last_watering_date": "2026-11-20"
+  },
+  {
+    "zone_id": "zone_02",
+    "user_id": "farmer",
+    "name": "B구역 (수직 농장 2)",
+    "crop_type": "상추",
+    "area": 60.0,
+    "soil_type": "양토",
+    "last_watering_date": "2026-11-17"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "water_unit_price": 450.0,
+  "electricity_unit_price": 140.0,
+  "equipments": [
+    {
+      "name": "환기팬 1호",
+      "power_watt": 75.0,
+      "equipment_type": "fan"
+    },
+    {
+      "name": "LED 보광등 A",
+      "power_watt": 120.0,
+      "equipment_type": "light"
+    },
+    {
+      "name": "온풍난방기",
+      "power_watt": 1500.0,
+      "equipment_type": "heater"
+    }
+  ]
+}

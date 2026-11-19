@@ -1,0 +1,46 @@
+{
+  "토마토": {
+    "crop_name": "토마토",
+    "min_soil_moisture": 25.0,
+    "irrigation_depth_mm": 10.0,
+    "temp_min": 18.0,
+    "temp_max": 28.0,
+    "humidity_min": 50.0,
+    "humidity_max": 75.0,
+    "target_illuminance": 30000.0,
+    "target_light_hours": 8.0
+  },
+  "상추": {
+    "crop_name": "상추",
+    "min_soil_moisture": 30.0,
+    "irrigation_depth_mm": 8.0,
+    "temp_min": 15.0,
+    "temp_max": 22.0,
+    "humidity_min": 60.0,
+    "humidity_max": 80.0,
+    "target_illuminance": 20000.0,
+    "target_light_hours": 7.0
+  },
+  "딸기": {
+    "crop_name": "딸기",
+    "min_soil_moisture": 28.0,
+    "irrigation_depth_mm": 9.0,
+    "temp_min": 16.0,
+    "temp_max": 24.0,
+    "humidity_min": 55.0,
+    "humidity_max": 75.0,
+    "target_illuminance": 25000.0,
+    "target_light_hours": 8.0
+  },
+  "파프리카": {
+    "crop_name": "파프리카",
+    "min_soil_moisture": 27.0,
+    "irrigation_depth_mm": 10.0,
+    "temp_min": 20.0,
+    "temp_max": 27.0,
+    "humidity_min": 55.0,
+    "humidity_max": 75.0,
+    "target_illuminance": 35000.0,
+    "target_light_hours": 8.0
+  }
+}
